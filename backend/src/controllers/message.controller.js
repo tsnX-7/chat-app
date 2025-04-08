@@ -8,7 +8,6 @@ export const getUsers = async (req, res) => {
     const filteredUsers = await User.find({
       _id: { $ne: loggedInUser },
     }).select("-password");
-    console.log(filteredUsers);
     res.status(200).json(filteredUsers);
   } catch (error) {
     console.log("Error in getUsers controller: ", error.message);
@@ -27,7 +26,6 @@ export const getMessages = async (req, res) => {
         { senderId: chatToId, receiverId: myId },
       ],
     });
-    console.log(allMessages);
     res.status(200).json(allMessages);
   } catch (error) {
     console.log("Error in getMessages controller: ", error.message);
