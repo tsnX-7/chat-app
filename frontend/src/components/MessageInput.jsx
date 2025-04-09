@@ -5,6 +5,7 @@ import { Image, Send, X } from "lucide-react";
 const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(false); // State to track loading
   const fileInputRef = useRef(null);
   const { sendMessage } = useChatStore();
 
@@ -30,17 +31,21 @@ const MessageInput = () => {
     e.preventDefault();
     if (!text.trim() && !imagePreview) return;
 
+    setLoading(true); // Set loading to true while sending the message
+
     try {
       await sendMessage({
         text: text.trim(),
         image: imagePreview,
-      }),
-        //clear all
-        setText("");
+      });
+      // Clear all
+      setText("");
       setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
-      console.error("Failed to send to message ", error);
+      console.error("Failed to send the message", error);
+    } finally {
+      setLoading(false); // Set loading to false after sending
     }
   };
 
@@ -49,19 +54,30 @@ const MessageInput = () => {
       {imagePreview && (
         <div className="mb-3 flex items-center gap-2">
           <div className="relative">
+            {/* Apply blur effect when loading */}
             <img
               src={imagePreview}
               alt="Preview"
-              className="w-20 h-20 object-cover rounded-lg border border-zinc-700"
+              className={`w-20 h-20 object-cover rounded-lg border border-zinc-700 ${
+                loading ? "blur-sm opacity-90" : ""
+              }`}
             />
-            <button
-              onClick={removeImage}
-              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300
-              flex items-center justify-center"
-              type="button"
-            >
-              <X className="size-3" />
-            </button>
+            {/* Show loading animation when loading */}
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="animate-pulse text-white text-2xl">...</div>
+              </div>
+            )}
+            {!loading && (
+              <button
+                onClick={removeImage}
+                className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300
+                flex items-center justify-center"
+                type="button"
+              >
+                <X className="size-3" />
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -85,8 +101,9 @@ const MessageInput = () => {
 
           <button
             type="button"
-            className={`hidden sm:flex btn btn-circle
-                     ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
+            className={`hidden sm:flex btn btn-circle ${
+              imagePreview ? "text-emerald-500" : "text-zinc-400"
+            }`}
             onClick={() => fileInputRef.current?.click()}
           >
             <Image size={20} />

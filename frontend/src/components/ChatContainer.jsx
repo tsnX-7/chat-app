@@ -29,12 +29,15 @@ const ChatContainer = () => {
     unsubscribeFromMessages,
   ]);
 
-  useEffect(() => {
-    if (messageEndRef.current && messages)
+  const scrollToBottom = () => {
+    if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    }
+  };
 
-  if (isMessagesLoading) return <div>Loading .. </div>;
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   if (isMessagesLoading) {
     return (
@@ -44,21 +47,18 @@ const ChatContainer = () => {
         <MessageInput />
       </div>
     );
-    s;
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-auto">
+    <div className="flex-1 flex flex-col">
       <ChatHeader />
-      {/* {console.log(messages)} */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 p-4 space-y-4 overflow-y-auto">
         {messages.map((message) => (
           <div
             key={message._id}
             className={`chat ${
               message.senderId === authUser._id ? "chat-end" : "chat-start"
             }`}
-            ref={messageEndRef}
           >
             <div className="chat-image avatar">
               <div className="size-10 rounded-full border">
@@ -79,18 +79,20 @@ const ChatContainer = () => {
               </time>
             </div>
 
-            <div className="chat-bubble flex-col">
+            <div className="chat-bubble flex flex-col">
               {message.image && (
                 <img
                   src={message.image}
                   alt="attachment"
                   className="sm:max-w-[200px] rounded-md mb-2"
+                  onLoad={scrollToBottom} // Trigger scroll when the image is fully loaded
                 />
               )}
               {message.text && <p>{message.text}</p>}
             </div>
           </div>
         ))}
+        <div ref={messageEndRef}></div>
       </div>
       <MessageInput />
     </div>

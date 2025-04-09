@@ -24,7 +24,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <Link
               to={"/settings"}
               className={`
@@ -49,7 +49,57 @@ const Navbar = () => {
                 </button>
               </>
             )}
-          </div>
+          </div> */}
+          {authUser && (
+            <>
+              <div className="flex items-center justify-between gap-5">
+                <div className="dropdown dropdown-end">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-circle avatar"
+                  >
+                    <div className="relative">
+                      <img
+                        alt="Tailwind CSS Navbar component"
+                        src={authUser?.profilePic || "./avatar.png"}
+                        className="size-12 rounded-full object-cover border-2"
+                      />
+                    </div>
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="menu menu-l dropdown-content bg-base-300 rounded-box z-1 mt-1 w-40 p-2 shadow"
+                  >
+                    <li>
+                      <Link to={"/profile"} className={`btn btn-sm gap-5`}>
+                        <span className="font-bold hidden sm:inline">
+                          {authUser.fullName}
+                        </span>
+                        {/* <User className="size-5" /> */}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to={"/settings"}
+                        className={`btn btn-sm gap-5 transition-colors`}
+                      >
+                        <Settings className="w-4 h-4" />
+                        <span className="hidden sm:inline">Settings</span>
+                      </Link>
+                    </li>
+
+                    <li>
+                      <button className="btn btn-sm gap-5" onClick={logout}>
+                        <LogOut className="size-5" />
+                        <span className="hidden sm:inline">Logout</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </header>
