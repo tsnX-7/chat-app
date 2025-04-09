@@ -58,14 +58,14 @@ const MessageInput = () => {
             <img
               src={imagePreview}
               alt="Preview"
-              className={`w-20 h-20 object-cover rounded-lg border border-zinc-700 ${
-                loading ? "blur-sm opacity-90" : ""
+              className={`w-20 h-20 object-cover rounded-lg border border-zinc-800 ${
+                loading ? "blur-[1px] opacity-90" : ""
               }`}
             />
             {/* Show loading animation when loading */}
             {loading && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="animate-pulse text-white text-2xl">...</div>
+                <div className="animate-pulse text-gray-700 text-6xl">...</div>
               </div>
             )}
             {!loading && (
