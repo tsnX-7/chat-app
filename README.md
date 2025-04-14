@@ -221,7 +221,7 @@ The project uses the following environment variables:
 
 ## Deployed Version
 
-You can access the deployed version of the project here: **[Deployed Link](#)**
+You can access the deployed version of the project here: **[Deployed Link](https://chat-app-d8c8.onrender.com/)**
 
 --- 
 
